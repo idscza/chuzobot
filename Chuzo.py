@@ -32,6 +32,16 @@ async def on_voice_state_update(member,before,after):
         await asyncio.sleep(3)
         await copetebullying.disconnect()
         await member.guild.text_channels[0].send("El Celoso ha llegado",tts=True)
+    
+    elif ('#7808' in str(member) or 'jpcarreno29' in str(member.nick).lower()) and before.channel is None and not after.channel is None:
+        
+        await asyncio.sleep(5)
+        n = r.randint(0,1)
+        if n:
+            await member.guild.text_channels[0].send("Ay, ya se cayó",tts=True)
+        else:
+            val = discord.File('media/se_cayo.png')
+            await member.guild.text_channels[0].send('',file =val)
         
 @client.event
 async def on_ready():
@@ -57,10 +67,28 @@ async def on_message(message):
         palabra = message.content.replace('!!kabs ','')
         pregunta = '¿Qué es {}?'.format(palabra)
         await message.channel.send(pregunta,tts=True)
+
+    if message.content.startswith('!!juanito'):
+        mensaje = 'Atención, llegó el tren del humor'
+        await message.channel.send(mensaje,tts=True)
     
     if message.content.startswith('!!chuzo'):
         await message.channel.send('El menú de ventas está en desarrollo, espérelo más adelante')
         #TODO
+    
+    if message.content.startswith('!!lois'):
+        gente = message.mentions
+        mensaje = ''
+        for pana in gente:
+            if pana.nick is None:
+                nombre = str(pana).split('#')[0]
+            else:
+                nombre = pana.nick
+            mensaje+=nombre+', '+fraselois()+'\n'
+        if mensaje != '':
+            await message.channel.send(mensaje,tts=True)
+        else:
+            await message.channel.send(fraselois(),tts=True)
     
     if message.content.startswith('!!chacon'):
         await message.channel.send(get_insta())
@@ -214,7 +242,9 @@ lista_comandos = '¡¡¡Bienvenidos al bot del Chuzo!!! \n\n'+\
                     '!!marlon : Dice "ey" a un usuario aleatorio\n'+\
                     '!!dianita : Muestra lo más lindo de Wuaira\n'+\
                     '!!valeria : Muestra uno de los amores de Valeria\n'+\
-                    '!!copete : Le pone sabor al servidor'+\
+                    '!!copete : Le pone sabor al servidor\n'+\
+                    '!!lois : Expresa la opinión sobre su comentario\n'+\
+                    '!!juanito : Reacciona a la comedia\n'+\
                     '!!matiz : Reproduce el sonido de Tokens'
 
 def get_insta():
@@ -226,6 +256,13 @@ def get_insta():
         num = r.randint(0,len(instas)-1)
         elinsta = 'https://www.instagram.com/'+instas[num][0]
     return elinsta
+
+def fraselois():
+    lafrase = r.randint(0,4)
+    frases = ["Ah bueno, pa saber","No sabía pero ahora ya sé","Buen dato mi rey, pero no te pregunté","Amanecimos preguntones hoy","Imagínate si te hubiera preguntado de verdad"]
+    frase = frases[lafrase]
+    return frase
+
 
 def get_dato():   
     return r.choice(['Durante la II Guerra Mundial la marihuana fue utilizada por los soldados como un «suero de la verdad». Así pues, en los interrogatorios se administraba una gran cantidad de cannabis a los soldados para que revelasen determinadas informaciones',
@@ -243,4 +280,6 @@ def get_dato():
                      'No es sobre la Marihuana, pero Chacón es re Gay'])
 
 
-client.run('NjkyMjA5NjI1ODA5OTQ0NTg2.XoPfCQ.GUqbES1Oecd6ixYFTi-0DuNW2vM')
+
+def elclient():
+    return client
